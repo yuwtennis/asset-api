@@ -1,6 +1,8 @@
 import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+import datetime
+from elasticsearch import Elasticsearch
 
 chrome_options = Options()
 chrome_options.add_argument('--headless')
@@ -20,8 +22,19 @@ total_asset = table.find_element_by_xpath('//tbody/tr[1]/td').text
 profit      = table.find_element_by_xpath('//tbody/tr[2]/td').text
 
 mrf_remain  = dd.find_element_by_xpath('//div/div/p[2]').text
+date = datetime.datetime.utcnow().isoformat()+'Z'
 
-print(f'{total_asset},{profit},{mrf_remain}')
+total_asset = total_asset.replace('円', '').replace(',', '')
+profit = profit.replace('円', '').replace(',', '').replace('+', '')
+mrf_remain = mrf_remain.replace('円', '').replace(',', '')
+
+print(f'{date},{total_asset},{profit},{mrf_remain}')
 
 driver.find_element_by_link_text('ログアウト').click()
 driver.quit()
+
+es = Elasticsearch(hosts=['localhost:19200'])
+
+doc = {"total_asset": int(total_asset), "profit": int(profit), "mrf_remain": int(mrf_remain), "created_on": date }
+
+es.index(index='nomura-sec', body=doc)
