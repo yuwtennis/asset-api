@@ -1,2 +1,2 @@
-from .nomura_sec import *
 from .scraper import *
+from .nomura_sec import *

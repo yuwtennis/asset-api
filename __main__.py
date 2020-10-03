@@ -9,9 +9,10 @@ def main():
     module = os.getenv('LOAD_MODULE')
     name   = os.getenv('NAME')
 
-    if name == 'NomuraSec':
-        c = importlib.import_module('apps.{}.{}'.format(module, name))
-        c(os.getenv('BRANCH_CODE'),  \
+    if name == 'nomura_sec':
+        c = importlib.import_module('.'+name, package='.apps.'+module)
+
+        c.NomuraSec(os.getenv('BRANCH_CODE'),  \
           os.getenv('ACCOUNT_NAME'), \
           os.getenv('SECRET'))
     else:
