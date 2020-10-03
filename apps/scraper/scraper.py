@@ -17,8 +17,12 @@ class Scraper:
         self.driver = webdriver.Chrome(options=chrome_options)
 
     """ Place holder """
-    def login(self, url):
+    def access(self, url):
         self.driver.get(url)
+
+    """ Place holder """
+    def login(self):
+        pass
 
     """ Place holder """
     def scrape(self):
